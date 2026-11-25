@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f2f4f7">
+  <title>The Phantom ₹799 · Card activity</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/styles.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="ledger-mark" aria-hidden="true"></span>
+        <div>
+          <p class="brand-name">The Phantom ₹799</p>
+          <p class="muted">Payment support simulator</p>
+        </div>
+      </div>
+      <nav aria-labelledby="case-nav-title">
+        <h2 id="case-nav-title">Support cases</h2>
+        <div id="case-list" class="case-list"></div>
+      </nav>
+    </aside>
+    <main>
+      <header class="page-heading">
+        <div>
+          <h1>Card activity</h1>
+          <p id="case-meta" class="muted">Loading support cases…</p>
+        </div>
+        <p class="data-note"><span aria-hidden="true"></span>Fictional workshop data</p>
+      </header>
+      <div id="load-error" class="panel error" role="alert" hidden></div>
+      <div id="case-content" hidden>
+        <section class="panel case-note" aria-labelledby="report-title">
+          <div>
+            <h2 id="report-title">Customer report</h2>
+            <blockquote id="case-report"></blockquote>
+          </div>
+        </section>
+        <div class="activity-grid">
+          <section class="panel activity" aria-labelledby="activity-title">
+            <header class="section-header">
+              <h2 id="activity-title">Statement entries</h2>
+              <p id="entry-count" class="muted"></p>
+            </header>
+            <div class="statement-head" aria-hidden="true">
+              <span>Merchant</span><span>Event</span><span>Amount</span>
+            </div>
+            <ul id="statement" class="statement"></ul>
+            <p id="empty-statement" class="muted" hidden>No statement entries for this case.</p>
+          </section>
+          <section id="entry-panel" class="panel entry-panel" aria-labelledby="entry-title" aria-live="polite">
+            <header class="section-header"><h2 id="entry-title" tabindex="-1">Selected entry</h2></header>
+            <div id="entry-detail"></div>
+          </section>
+        </div>
+      </div>
+      <noscript><p class="panel error">Enable JavaScript to use the payment support simulator.</p></noscript>
+    </main>
+  </div>
+</body>
+</html>
