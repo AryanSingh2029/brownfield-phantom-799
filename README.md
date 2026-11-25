@@ -1,76 +1,105 @@
 # The Phantom ₹799
 
-You’ve joined the team that maintains a card support simulator. A customer says they ordered one pizza but sees two ₹799 entries. A second customer reports the same thing. Extend the existing app so a support agent can tell what happened in each case.
+“I ordered one pizza. Why are there two ₹799 entries on my card?”
 
-## Run the simulator
+Ananya wants an answer. A few minutes later, Kabir calls about the same restaurant and the same amount. You maintain the tool their support agent uses. Today the agent can click each statement entry and inspect its details, but has to piece together the story and remember what they told each customer.
 
-Install Node.js 22 or newer before the workshop. Choose this folder in IBM Bob, open the terminal, and run:
+Your assignment is to extend the existing app so an agent can **explain a payment, save a case decision, and revisit that decision when new activity changes the answer**. Both customer cases and the refund file are included from the start.
+
+## Open your first case
+
+Clone or download the starter, open its folder in IBM Bob, and open a terminal in the directory containing `package.json`. You need Node.js 22 or newer. The app uses fictional local data and has no packages to install.
 
 ```sh
+npm test
 npm start
 ```
 
-Open [http://127.0.0.1:7990](http://127.0.0.1:7990). The other terminal command you need is `npm test`. The simulator uses local, fictional data and requires no npm installation or service credentials. If port 7990 is busy, set the `PORT` environment variable and restart.
+You should see four passing tests. Open [the support desk](http://127.0.0.1:7990/), select **Case 214**, and click each Little Oven Pizza entry. Watch the **Payment reference** in the details panel. Now try **Case 215**. What would you tell each caller?
 
-Everything needed for the exercise is in this folder from the start, including [the event batch](fixtures/replay-batch.json). Work through the two parts at your own pace; no additional files will be handed out later.
+## 1. Show the payment history
 
-## Part 1 · Investigate a payment
+Add a payment timeline to the open case alongside the existing statement. Each event has its own `id`. Events with the same `paymentRef` in that case belong to one payment. Group them by that reference and sort each group by `occurredAt`, oldest first. Two purchases can have the same merchant and amount.
 
-Start by opening both cases and inspecting their entries. Ask Bob to trace the path from the sample data to the selected-entry panel. In Plan mode, have it propose the smallest set of changes, then review that plan before generating code.
+Show what happened and the net amount charged for each payment. An authorisation reserves money and contributes zero to the net. A capture adds a posted charge. A refund subtracts money. Do the arithmetic in integer paise and display rupees.
 
-- Add a payment timeline for the open case. Group entries by `paymentRef` within that case and show events oldest first. Keep the existing statement and its entry details working.
-- In Case 214, the two pizza entries share a reference. Show one payment with an authorisation followed by a posted charge. The amount posted is ₹799.00.
-- In Case 215, the two pizza entries have different references. Show two payments with ₹799.00 posted for each. Matching merchants or amounts alone do not link payments.
-- Show an authorisation-only payment as pending or authorised. It contributes zero to the amount posted.
+| Pizza activity | What the agent should see |
+| --- | --- |
+| Ananya · Case 214 | One payment with a ₹799 authorisation followed by a ₹799 capture. Net charged for pizza is ₹799. |
+| Kabir · Case 215 | Two separate payments, each with a posted charge of ₹799. Together they account for ₹1,598 in pizza charges. |
 
-## Part 2 · Replay a batch
+An authorisation-only payment should appear as pending, with zero posted. The agent should still be able to open individual statement entries.
 
-The [provided JSON batch](fixtures/replay-batch.json) has a `caseId` and an `events` array. It includes a refund and copies of events already in Case 214. Add a way to load it into the open case while the app is running. You can inspect and test this file at any point in the exercise.
+## 2. Save the agent’s decision
 
-- Merge the batch into the matching case. Keep existing entries, and skip identical events already seen under the same event ID. Reject conflicting data under an existing ID or a batch for another case without changing the open case.
-- Use event time for the timeline. A batch can list a refund before the original charge.
-- A refund reduces the amount posted for that payment. Display the refund and the net amount. Use integer paise for arithmetic.
-- Loading the same batch twice should produce the same entries and totals as loading it once. In-memory changes are enough.
+Let the agent record a note and mark the open case **Explained** or **Needs review**. Keep the decision and note with that customer when switching cases or refreshing the page. Local browser storage is sufficient.
 
-Ask Bob for test cases before applying the final fix. Run the original tests and add coverage for the two pizza cases plus the out-of-order refund and repeated import. Add a short note to this README explaining how to use your feature. Be ready to demo both cases and one test.
+Try recording “One ₹799 pizza charge posted” for Ananya and marking her case **Explained**. For Kabir, record “Customer reports one order. Two separate charges posted” and select **Needs review**.
+
+## 3. Reopen a case when the answer changes
+
+Ananya receives a ₹200 refund. The payment provider’s update includes the refund **and** two events the agent has already seen. Give the agent a file picker to import the supplied [refund batch](fixtures/replay-batch.json) into the open case.
+
+- Merge events by event ID. Skip identical repeats. If an ID has conflicting details or the file belongs to another case, explain the problem and reject the entire batch without changing any records or decisions.
+- Show the refund after the charge according to event time, even when the refund appears first in the file. Ananya’s pizza payment should now show ₹799 charged, ₹200 refunded and **₹599 net**.
+- When an import changes a payment’s net amount in an **Explained** case, move that case to **Needs review** and retain the agent’s note. Other cases keep their own records and decisions.
+- The agent can review the refund and mark the case **Explained** again. Importing the same file again must leave it explained. Keep the imported events across refreshes so a previously processed refund stays counted exactly once.
+
+## What to demonstrate
+
+1. Show how the two customers’ pizza histories lead to different answers.
+2. Save a decision and note for each customer. Refresh and show both were retained.
+3. Import the refund into Ananya’s explained case. Show the ₹599 net, the reopened case and the retained note.
+4. Mark Ananya’s case explained again, refresh, and import the same file. Show that she still has five statement entries, a ₹599 pizza payment and an explained case. Check that Kabir’s case still has its original entries and decision.
+5. Run the original tests and your new tests. Cover the two pizza histories, refund ordering, reopening, repeat imports, and rejected batches. Walk through one test and one engineering decision you made with Bob. Add a short usage note describing your finished feature.
+
+## Where to look
+
+| File | What you’ll find |
+| --- | --- |
+| `data/cases.json` | The customers and their starting card activity |
+| `server.mjs` | The local server and routes for the page, scripts and case data |
+| `public/app.js` | Case selection, statement rows and entry details |
+| `public/statement.js` | Statement mapping and display formatting |
+| `test/statement.test.js` | Tests for the original behaviour |
+| `fixtures/replay-batch.json` | Ananya’s refund and two repeated events |
 
 ## Optional IBM Bob prompts
 
-Use these one at a time. Confirm Bob’s explanation against the app, review its proposed changes, and check the result yourself before moving on. You can adapt the prompts or write your own.
+If you’re new to Bob, copy **one prompt at a time** into the same conversation. Read the response and try the suggested checks before continuing. You can also work independently using the requirements above.
 
-**1. Understand the existing app**
+**1. Explore the starter**
 
-> Read this README and trace how the sample payment data reaches the statement and selected-entry panel. Point me to the relevant files and functions. Using the two pizza cases, explain how a payment reference differs from an event ID. Keep this step read-only.
+```text
+Read this README and run the baseline tests. Trace one pizza event from data/cases.json to the entry details on screen. Show me where to click in each case and explain how an event ID differs from a payment reference. Stop before editing code.
+```
 
-**2. Plan Part 1**
+**2. Make a plan**
 
-> In Plan mode, propose the smallest change that adds a payment timeline to the open case. List the files you’d change, the existing behaviour to preserve, and how we can check both ₹799 cases. Stop after the plan so I can review it.
+```text
+Plan the three features in this README using the existing app. Identify the files to change, how to keep events and decisions with the right case after refresh, and how to decide whether an import should reopen a case. Give me a short implementation and test plan for review.
+```
 
-**3. Build the first version**
+**3. Build the timeline**
 
-> Implement Part 1 using the plan we agreed on. Keep the statement and entry details working. Run the baseline tests, then tell me what to click in both cases to check the new timeline.
+```text
+Implement the payment history from part 1. Add tests for Ananya’s one payment, Kabir’s two payments and an authorisation-only payment. Run the tests and tell me how to check both pizza histories in the UI.
+```
 
-**4. Plan and debug the replay**
+**4. Save decisions**
 
-> Read Part 2 and inspect fixtures/replay-batch.json. Pick one failure this input could expose and write a regression test for it. Run the test and explain what the result tells us before changing the payment logic. If the app can’t load the batch yet, outline the smallest way to add that capability.
+```text
+Implement part 2. Let me save a status and note per case. Walk me through saving different decisions for Ananya and Kabir, switching between them, and refreshing to check that both decisions survive.
+```
 
-**5. Finish Part 2**
+**5. Build and test the refund flow**
 
-> Implement the batch replay rules from Part 2 and run the tests. Walk me through how to check the refund in the UI, import the same file again, and confirm that the number of entries and net amount stay the same.
+```text
+Read part 3 and fixtures/replay-batch.json. First write a regression test for this sequence: import the refund into an explained case, review and close it again, then replay the same file. Run the test and explain its first failure. Implement the import, persistence and reopening rules. Cover wrong-case and conflicting batches, run the tests again, and give me the UI steps to verify the result.
+```
 
-**6. Review and document**
+**6. Prepare the demo**
 
-> Review our diff against both parts. Point out any missing test or behaviour change with a concrete example. Add a short README note on using the timeline and replay feature, and give me a brief demo checklist.
-
-## Code map
-
-| File | Role |
-| --- | --- |
-| `data/cases.json` | The two fictional cases and their original card events |
-| `server.mjs` | Local server for the page, browser scripts, and case data |
-| `public/app.js` | Case selection, statement rows, and the selected-entry panel |
-| `public/statement.js` | Statement mapping and display formatting |
-| `test/statement.test.js` | Baseline checks for the existing statement |
-| `fixtures/replay-batch.json` | Batch to import for Part 2; already available at the start |
-
-Each event has an `id`, `paymentRef`, `type`, `merchant`, `amountPaise`, and UTC `occurredAt` timestamp. The simulator recognises `authorisation`, `capture` (a posted charge), and `refund`. The UI displays times in IST. Payment rules in this exercise are fictional and are supplied above.
+```text
+Review our changes against “What to demonstrate”. Run the full test suite, flag any unmet requirement with a concrete example, and help me resolve it. Add a short usage note. Give me a demo checklist and ask me to explain why a repeated refund file leaves an explained case closed.
+```

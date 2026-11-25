@@ -17,12 +17,12 @@
     "label": "Case 215",
     "customer": "Kabir Mehta",
     "cardEnding": "8152",
-    "report": "I ordered one pizza. Why are there two ₹799 entries on my card?",
+    "report": "My pizza receipt says ₹799, but I see Little Oven twice. Was I charged ₹1,598?",
     "events": [
       {"id":"evt-215-1","paymentRef":"PAY-B311","type":"capture","merchant":"Little Oven Pizza","amountPaise":79900,"occurredAt":"2026-11-25T13:12:00Z"},
       {"id":"evt-215-2","paymentRef":"PAY-B312","type":"capture","merchant":"Little Oven Pizza","amountPaise":79900,"occurredAt":"2026-11-25T13:14:00Z"},
-      {"id":"evt-215-3","paymentRef":"PAY-B279","type":"capture","merchant":"Metro Books","amountPaise":45900,"occurredAt":"2026-11-25T08:35:00Z"},
-      {"id":"evt-215-4","paymentRef":"PAY-B244","type":"capture","merchant":"Juniper Coffee","amountPaise":22500,"occurredAt":"2026-11-24T04:20:00Z"}
+      {"id":"evt-215-3","paymentRef":"PAY-B279","type":"capture","merchant":"Lakeview Grocers","amountPaise":68400,"occurredAt":"2026-11-25T09:48:00Z"},
+      {"id":"evt-215-4","paymentRef":"PAY-B244","type":"capture","merchant":"City Metro Recharge","amountPaise":15000,"occurredAt":"2026-11-24T03:12:00Z"}
     ]
   }
 ]

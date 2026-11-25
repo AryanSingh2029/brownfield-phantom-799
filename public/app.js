@@ -21,6 +21,7 @@ function renderCaseButtons() {
     const button = element('button', '', 'case-button');
     button.type = 'button';
     button.append(
+      element('span', supportCase.customer.split(' ').map(part => part[0]).join(''), 'avatar'),
       element('span', supportCase.label, 'case-number'),
       element('span', supportCase.customer, 'case-customer'),
     );
@@ -60,7 +61,7 @@ function renderStatement() {
     button.setAttribute('aria-pressed', String(entry.id === selectedEventId));
     const merchant = element('span', '', 'merchant');
     merchant.append(element('span', entry.merchant), element('span', formatStatementTime(entry.occurredAt), 'row-time'));
-    button.append(merchant, element('span', entry.label, 'entry-status'), element('span', displayAmount(entry), 'row-amount'));
+    button.append(merchant, element('span', entry.label, 'entry-status ' + entry.type), element('span', displayAmount(entry), 'row-amount'));
     button.addEventListener('click', () => {
       selectedEventId = entry.id;
       for (const sibling of statement.querySelectorAll('button')) {
@@ -101,7 +102,7 @@ function renderEntry(entry) {
   }
 
   const amount = element('p', displayAmount(entry), 'detail-amount');
-  detail.replaceChildren(amount, element('p', entry.merchant, 'detail-merchant'), facts);
+  detail.replaceChildren(amount, element('p', entry.merchant, 'detail-merchant'), facts, element('p', ({ authorisation: 'Authorised means the amount was reserved on the card.', capture: 'Posted means the charge was completed.', refund: 'Refunded means money was returned to the card.' })[entry.type] ?? '', 'event-note'));
 }
 
 async function loadCases() {

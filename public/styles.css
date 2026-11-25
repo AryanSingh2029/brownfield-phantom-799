@@ -109,3 +109,32 @@ blockquote { font-size: 20px; letter-spacing: -.02em; line-height: 1.35; }
   .row-amount { grid-column: 2; grid-row: 1; }
   .entry-status { grid-column: 2; grid-row: 2; text-align: right; }
 }
+
+/* Support desk workspace */
+:root { --ground:#f3f5ef; --ink:#182e2a; --muted:#4c625d; --border:#cfdbd3; --rule:#e1e8e1; --data:#066653; --radius:16px; }
+.shell { max-width:none; grid-template-columns:250px minmax(0,1fr); }
+.sidebar { background:#103e37; color:#fff; padding:35px 18px; }
+.sidebar .muted,.sidebar nav h2,.case-number { color:#b8d9cf; }
+.brand { margin-bottom:50px; }
+.ledger-mark { background:#d6f78b; border:0; height:36px; width:36px; border-radius:10px; }
+.ledger-mark::before,.ledger-mark::after { background:#164738; left:10px; width:16px; top:12px; height:3px; }
+.ledger-mark::after { top:20px; width:10px; }
+.case-button { grid-template-columns:36px 1fr; column-gap:12px; align-items:center; padding:12px; border-radius:12px; }
+.case-button[aria-pressed="true"] { background:#28584d; border-color:#83aa91; }
+.avatar { grid-row:span 2; display:grid; place-items:center; background:#d0e7db; color:#184b40; border-radius:50%; width:36px; height:36px; font-weight:700; }
+main { padding-top:44px; }
+h1 { font-size:clamp(28px,3vw,45px); }
+.case-note { padding:28px; border:0; background:#dff1bc; border-left:6px solid #50834f; }
+.case-note h2 { color:#395d35; }
+blockquote { max-width:32em; font-family:Georgia,serif; font-size:clamp(23px,2.5vw,36px); }
+.activity-grid { margin-top:8px; }
+.row-hint,.event-note { color:var(--muted); font-size:13px; }
+.row-hint { margin:-6px 0 14px; }
+.statement-row { min-height:70px; }
+.statement-row[aria-pressed="true"] { background:#e6f2e9; border-color:#a1c8ae; }
+.entry-status { justify-self:start; border-radius:20px; padding:3px 8px; background:#ddf0e5; color:#245b41; }
+.entry-status.authorisation { background:#fff0c9; color:#795111; }
+.entry-panel { border-top:4px solid #39806a; }
+.event-note { margin-top:12px; background:#eef4ee; border-radius:8px; padding:12px; }
+@media(max-width:1000px) { .shell { grid-template-columns:1fr; } .sidebar { padding:14px 24px; } .brand { margin:0; } main { padding-top:24px; } }
+@media(max-width:680px) { .case-button { padding:6px; } .sidebar { padding:12px 16px; } .case-note { padding:18px; } .entry-status { justify-self:end; } }

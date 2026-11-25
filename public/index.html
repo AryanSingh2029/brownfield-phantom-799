@@ -16,7 +16,7 @@
         <span class="ledger-mark" aria-hidden="true"></span>
         <div>
           <p class="brand-name">The Phantom ₹799</p>
-          <p class="muted">Payment support simulator</p>
+          <p class="muted">Support desk</p>
         </div>
       </div>
       <nav aria-labelledby="case-nav-title">
@@ -27,7 +27,7 @@
     <main>
       <header class="page-heading">
         <div>
-          <h1>Card activity</h1>
+          <h1>Payment investigation</h1>
           <p id="case-meta" class="muted">Loading support cases…</p>
         </div>
         <p class="data-note"><span aria-hidden="true"></span>Fictional workshop data</p>
@@ -36,16 +36,17 @@
       <div id="case-content" hidden>
         <section class="panel case-note" aria-labelledby="report-title">
           <div>
-            <h2 id="report-title">Customer report</h2>
+            <h2 id="report-title">Customer message</h2>
             <blockquote id="case-report"></blockquote>
           </div>
         </section>
         <div class="activity-grid">
           <section class="panel activity" aria-labelledby="activity-title">
             <header class="section-header">
-              <h2 id="activity-title">Statement entries</h2>
+              <h2 id="activity-title">Card statement</h2>
               <p id="entry-count" class="muted"></p>
             </header>
+            <p class="row-hint">Select a transaction to inspect its payment reference.</p>
             <div class="statement-head" aria-hidden="true">
               <span>Merchant</span><span>Event</span><span>Amount</span>
             </div>
@@ -53,7 +54,7 @@
             <p id="empty-statement" class="muted" hidden>No statement entries for this case.</p>
           </section>
           <section id="entry-panel" class="panel entry-panel" aria-labelledby="entry-title" aria-live="polite">
-            <header class="section-header"><h2 id="entry-title" tabindex="-1">Selected entry</h2></header>
+            <header class="section-header"><h2 id="entry-title" tabindex="-1">Entry details</h2></header>
             <div id="entry-detail"></div>
           </section>
         </div>
