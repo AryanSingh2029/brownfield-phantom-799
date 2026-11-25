@@ -12,7 +12,9 @@ npm start
 
 Open [http://127.0.0.1:7990](http://127.0.0.1:7990). The other terminal command you need is `npm test`. The simulator uses local, fictional data and requires no npm installation or service credentials. If port 7990 is busy, set the `PORT` environment variable and restart.
 
-## First checkpoint · Investigate a payment
+Everything needed for the exercise is in this folder from the start, including [the event batch](fixtures/replay-batch.json). Work through the two parts at your own pace; no additional files will be handed out later.
+
+## Part 1 · Investigate a payment
 
 Start by opening both cases and inspecting their entries. Ask Bob to trace the path from the sample data to the selected-entry panel. In Plan mode, have it propose the smallest set of changes, then review that plan before generating code.
 
@@ -21,9 +23,9 @@ Start by opening both cases and inspecting their entries. Ask Bob to trace the p
 - In Case 215, the two pizza entries have different references. Show two payments with ₹799.00 posted for each. Matching merchants or amounts alone do not link payments.
 - Show an authorisation-only payment as pending or authorised. It contributes zero to the amount posted.
 
-## Second checkpoint · Replay a batch
+## Part 2 · Replay a batch
 
-Your facilitator will hand out a JSON batch with a `caseId` and an `events` array. Add a way to load it into the open case while the app is running.
+The [provided JSON batch](fixtures/replay-batch.json) has a `caseId` and an `events` array. It includes a refund and copies of events already in Case 214. Add a way to load it into the open case while the app is running. You can inspect and test this file at any point in the exercise.
 
 - Merge the batch into the matching case. Keep existing entries, and skip identical events already seen under the same event ID. Reject conflicting data under an existing ID or a batch for another case without changing the open case.
 - Use event time for the timeline. A batch can list a refund before the original charge.
@@ -40,25 +42,25 @@ Use these one at a time. Confirm Bob’s explanation against the app, review its
 
 > Read this README and trace how the sample payment data reaches the statement and selected-entry panel. Point me to the relevant files and functions. Using the two pizza cases, explain how a payment reference differs from an event ID. Keep this step read-only.
 
-**2. Plan the first checkpoint**
+**2. Plan Part 1**
 
 > In Plan mode, propose the smallest change that adds a payment timeline to the open case. List the files you’d change, the existing behaviour to preserve, and how we can check both ₹799 cases. Stop after the plan so I can review it.
 
 **3. Build the first version**
 
-> Implement the first checkpoint using the plan we agreed on. Keep the statement and entry details working. Run the baseline tests, then tell me what to click in both cases to check the new timeline.
+> Implement Part 1 using the plan we agreed on. Keep the statement and entry details working. Run the baseline tests, then tell me what to click in both cases to check the new timeline.
 
-**4. Plan and debug the replay** *(once you get the second batch)*
+**4. Plan and debug the replay**
 
-> Read the second checkpoint and inspect the new JSON batch. Pick one failure this input could expose and write a regression test for it. Run the test and explain what the result tells us before changing the payment logic. If the app can’t load the batch yet, outline the smallest way to add that capability.
+> Read Part 2 and inspect fixtures/replay-batch.json. Pick one failure this input could expose and write a regression test for it. Run the test and explain what the result tells us before changing the payment logic. If the app can’t load the batch yet, outline the smallest way to add that capability.
 
-**5. Finish the second checkpoint**
+**5. Finish Part 2**
 
-> Implement the batch replay rules from the README and run the tests. Walk me through how to check the refund in the UI, import the same file again, and confirm that the number of entries and net amount stay the same.
+> Implement the batch replay rules from Part 2 and run the tests. Walk me through how to check the refund in the UI, import the same file again, and confirm that the number of entries and net amount stay the same.
 
 **6. Review and document**
 
-> Review our diff against both checkpoints. Point out any missing test or behaviour change with a concrete example. Add a short README note on using the timeline and replay feature, and give me a brief demo checklist.
+> Review our diff against both parts. Point out any missing test or behaviour change with a concrete example. Add a short README note on using the timeline and replay feature, and give me a brief demo checklist.
 
 ## Code map
 
@@ -69,5 +71,6 @@ Use these one at a time. Confirm Bob’s explanation against the app, review its
 | `public/app.js` | Case selection, statement rows, and the selected-entry panel |
 | `public/statement.js` | Statement mapping and display formatting |
 | `test/statement.test.js` | Baseline checks for the existing statement |
+| `fixtures/replay-batch.json` | Batch to import for Part 2; already available at the start |
 
-Each event has an `id`, `paymentRef`, `type`, `merchant`, `amountPaise`, and UTC `occurredAt` timestamp. The simulator recognises `authorisation`, `capture` (a posted charge), and `refund`. The UI displays times in IST. Payment rules in this exercise are fictional and are supplied in the checkpoints.
+Each event has an `id`, `paymentRef`, `type`, `merchant`, `amountPaise`, and UTC `occurredAt` timestamp. The simulator recognises `authorisation`, `capture` (a posted charge), and `refund`. The UI displays times in IST. Payment rules in this exercise are fictional and are supplied above.

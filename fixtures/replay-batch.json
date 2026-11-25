@@ -1,0 +1,8 @@
+{
+  "caseId": "case-214",
+  "events": [
+    {"id":"evt-214-5","paymentRef":"PAY-A208","type":"refund","merchant":"Little Oven Pizza","amountPaise":20000,"occurredAt":"2026-11-25T13:22:00Z"},
+    {"id":"evt-214-2","paymentRef":"PAY-A208","type":"capture","merchant":"Little Oven Pizza","amountPaise":79900,"occurredAt":"2026-11-25T13:14:00Z"},
+    {"id":"evt-214-1","paymentRef":"PAY-A208","type":"authorisation","merchant":"Little Oven Pizza","amountPaise":79900,"occurredAt":"2026-11-25T13:12:00Z"}
+  ]
+}
